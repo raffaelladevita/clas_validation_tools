@@ -1,8 +1,9 @@
+package c12validtools;
 import java.io.File;
-//import org.junit.Test;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 //import static org.junit.Assert.*;
+//import org.junit.Test;
 
 import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
@@ -19,38 +20,33 @@ import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.graphics.EmbeddedCanvasTabbed;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.utils.groups.IndexedList;
-    
-public class ReadInput {
 
+public class c12validtools {
 
-    String resultDir=System.getProperty("RESULTS");
+    public void main(){
+        String resultDir=System.getProperty("simulation");
         File dir = new File(resultDir);
         if (!dir.isDirectory()) {
             System.err.println("Cannot find output directory");
-//            assertEquals(false, true);
         }
         String inname = System.getProperty("INPUTFILE");
         String fileName=resultDir + "/out_" + inname + ".hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
             System.err.println("Cannot find input file.");
-//            assertEquals(false, true); // use method from org.junit.Assert.* library to be able to do quantitative checks and test specific conditions
         }
 
         HipoDataSource reader = new HipoDataSource();
         reader.open(fileName);
 
         while (reader.hasEvent()) {
-	    DataEvent event = reader.getNextEvent();
+            DataEvent event = reader.getNextEvent();
             ttest.processEvent(event);
         }
         reader.close();
 
+    }
 
-}
-
-public class TrackingTest {
-        
     private DataBank getBank(DataEvent de,String bankName) {
         DataBank bank=null;
         if (de.hasBank(bankName))
@@ -65,9 +61,9 @@ public class TrackingTest {
     }
 
     public void loadMap(Map<Integer,List<Integer>> map, 
-                        DataBank fromBank, 
-                        DataBank toBank, 
-                        String idxVarName) {
+            DataBank fromBank, 
+            DataBank toBank, 
+            String idxVarName) {
         map.clear();
         if (fromBank==null) return;
         if (toBank==null) return;
@@ -84,7 +80,7 @@ public class TrackingTest {
         }
     }
 
-        /**
+    /**
      *
      * Load mapping from REC::Particle to REC::"Detector".
      *
@@ -125,7 +121,8 @@ public class TrackingTest {
     private void ProcessEvent(DataEvent event){
 
     }
+    private void plotHistos() {
 
-
+    }
 
 }
