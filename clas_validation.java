@@ -29,7 +29,7 @@ public class c12validtools {
         if (!dir.isDirectory()) {
             System.err.println("Cannot find output directory");
         }
-        String inname = System.getProperty("INPUTFILE");
+        String inname = System.getProperty("small");
         String fileName=resultDir + "/out_" + inname + ".hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
