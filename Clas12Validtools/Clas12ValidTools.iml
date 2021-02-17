@@ -23,5 +23,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.jlab.coat:coat-libs:6.2.0-SNAPSHOT" level="project" />
   </component>
 </module>

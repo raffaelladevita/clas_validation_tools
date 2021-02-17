@@ -48,13 +48,7 @@ public class C12validtools {
         ttest.setAnalysisTabNames("TBT Positive Tracks");
 
         ttest.CreateHistos();
-        String resultDir=System.getProperty("simulation");
-       /* File dir = new File(resultDir);
-        if (!dir.isDirectory()) {
-            System.err.println("Cannot find output directory");
-        }
-        String inname = System.getProperty("INPUTFILE");*/
-       // String fileName=resultDir + "/out_" + inname + ".hipo";
+
         String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
@@ -69,22 +63,23 @@ public class C12validtools {
             ttest.ProcessEvent(event);
         }
         reader.close();
-        JFrame frame = new JFrame("Tracking");
+        JFrame frame = new JFrame("C12Validtools");
         frame.setSize(1200, 800);
         frame.add(ttest.canvasTabbed);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         ttest.plotHistos();
-        System.out.print("Hi Michael");
 
     }
 
     private void plotHistos() {
-        //canvasTabbed.getCanvas("TBT Positive Tracks").divide(4,2);
+        canvasTabbed.getCanvas("TBT Positive Tracks").divide(4,2);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridX(false);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridY(false);
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(0);
         canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hi_p_pos"));
+        canvasTabbed.getCanvas("TBT Positive Tracks").cd(1);
+        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_x"));
 
     }
     private void CreateHistos() {
@@ -92,8 +87,12 @@ public class C12validtools {
         H1F hi_p_pos = new H1F("hi_p_pos", "hi_p_pos", 100, 0.0, 8.0);
         hi_p_pos.setTitleX("p (GeV)");
         hi_p_pos.setTitleY("Counts");
+        H1F hvert_x = new H1F("hvert_x", "hvert_x", 100, -0.1, 0.1);
+        hvert_x.setTitleX("Vx");
+        hvert_x.setTitleY("Counts");
         DataGroup dg_pos = new DataGroup(1,1);
         dg_pos.addDataSet(hi_p_pos, 1);
+        dg_pos.addDataSet(hvert_x, 2);
         dataGroups.add(dg_pos, 1);
 
     }
@@ -153,7 +152,6 @@ public class C12validtools {
 
     public DataBank getDetectorBank(int detId) {
         DataBank bankTo=null;
-
         return null;
     }
 
@@ -179,8 +177,10 @@ public class C12validtools {
                         bank.getFloat("Vx", loop),
                         bank.getFloat("Vy", loop),
                         bank.getFloat("Vz", loop));
+
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
+                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.v);
 
             }
         }
