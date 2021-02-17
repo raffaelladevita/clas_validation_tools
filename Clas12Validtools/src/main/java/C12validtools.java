@@ -180,7 +180,7 @@ public class C12validtools {
 
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
-                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.v);
+                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.vx());
 
             }
         }
