@@ -9,6 +9,7 @@
  * @author fizikci0147
  */
 //package C12validtools;
+package Clas12Validtools.src.main.java;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,8 @@ public class C12validtools {
 
         ttest.CreateHistos();
 
-        String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
+        //String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
+        String fileName="/Users/michaelnycz/JLAB_Programs/clas_validation_tools/small.hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
             System.err.println("Cannot find input file.");
@@ -80,7 +82,10 @@ public class C12validtools {
         canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hi_p_pos"));
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(1);
         canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_x"));
-
+        canvasTabbed.getCanvas("TBT Positive Tracks").cd(2);
+        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_t"));
+        canvasTabbed.getCanvas("TBT Positive Tracks").cd(3);
+        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("Beta"));
     }
     private void CreateHistos() {
 
@@ -90,9 +95,17 @@ public class C12validtools {
         H1F hvert_x = new H1F("hvert_x", "hvert_x", 100, -0.1, 0.1);
         hvert_x.setTitleX("Vx");
         hvert_x.setTitleY("Counts");
+        H1F hvert_t = new H1F("hvert_t","hvert_t",500,-100,400);
+        hvert_t.setTitleX("Vt");
+        hvert_t.setTitleY("Counts");
+        H1F beta = new H1F("Beta","Beta",100,-1,3);
+        beta.setTitleX("Beta");
+        beta.setTitleY("Counts");
         DataGroup dg_pos = new DataGroup(1,1);
         dg_pos.addDataSet(hi_p_pos, 1);
         dg_pos.addDataSet(hvert_x, 2);
+        dg_pos.addDataSet(hvert_t,3);
+        dg_pos.addDataSet(beta,3);
         dataGroups.add(dg_pos, 1);
 
     }
@@ -169,6 +182,16 @@ public class C12validtools {
                 if (bank.getByte("q", loop) == -1) pidCode = 11;
                 else if (bank.getByte("q", loop) == 1) pidCode = 211;
                 else pidCode = 22;
+                Validation_Particle New_Particle = new Validation_Particle(
+                        pidCode,
+                        bank.getFloat("px", loop),
+                        bank.getFloat("py", loop),
+                        bank.getFloat("pz", loop),
+                        bank.getFloat("vx", loop),
+                        bank.getFloat("vy", loop),
+                        bank.getFloat("vz", loop),
+                        bank.getFloat("vt",loop),
+                        bank.getFloat("beta",loop));
                 Particle recParticle = new Particle(
                         pidCode,
                         bank.getFloat("px", loop),
@@ -181,6 +204,8 @@ public class C12validtools {
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
                 dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.vx()); //thi
+                dataGroups.getItem(1).getH1F("hvert_t").fill(New_Particle.particle_vt);
+                dataGroups.getItem(1).getH1F("Beta").fill(New_Particle.beta);
 
             }
         }
