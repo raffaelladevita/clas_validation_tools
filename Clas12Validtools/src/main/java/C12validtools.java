@@ -73,22 +73,23 @@ public class C12validtools {
     }
 
     private void plotHistos() {
-        canvasTabbed.getCanvas("TBT Positive Tracks").divide(2,1);
+        canvasTabbed.getCanvas("TBT Positive Tracks").divide(2,2);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridX(false);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridY(false);
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(0);
         canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hi_p_pos"));
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(1);
-        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_x"));
+        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("h_px"));
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(2);
+        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_t"));
     }
     private void CreateHistos() {
 
         H1F hi_p_pos = new H1F("hi_p_pos", "hi_p_pos", 100, 0.0, 8.0);
         hi_p_pos.setTitleX("p (GeV)");
         hi_p_pos.setTitleY("Counts");
-        H1F hvert_x = new H1F("hvert_x", "hvert_x", 100, -0.1, 0.1);
-        hvert_x.setTitleX("Vx");
+        H1F hvert_x = new H1F("h_px", "h_px", 100, -0.1, 0.1);
+        hvert_x.setTitleX("Px");
         hvert_x.setTitleY("Counts");
         H1F hvert_t = new H1F("hvert_t","hvert_t",500,-100,400);
         hvert_t.setTitleX("Vt");
@@ -100,7 +101,7 @@ public class C12validtools {
         dg_pos.addDataSet(hi_p_pos, 1);
         dg_pos.addDataSet(hvert_x, 2);
         dg_pos.addDataSet(hvert_t,3);
-        dg_pos.addDataSet(beta,3);
+        dg_pos.addDataSet(beta,4);
         dataGroups.add(dg_pos, 1);
 
     }
@@ -161,7 +162,6 @@ public class C12validtools {
     }
 
 
-
     private void ProcessEvent(DataEvent event) {
         nEvents++;
         if ((nEvents % 10000) == 0) System.out.println("Analyzed " + nEvents + " events");
@@ -183,10 +183,13 @@ public class C12validtools {
                         bank.getFloat("Vx", loop),
                         bank.getFloat("Vy", loop),
                         bank.getFloat("Vz", loop));
+                float vert_t = bank.getFloat("Vt", loop);
 
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
-                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.vx());
+                dataGroups.getItem(1).getH1F("h_px").fill(recParticle.px());
+                dataGroups.getItem(1).getH1F("hvert_t").fill(vert_t);
+
 
             }
         }
