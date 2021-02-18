@@ -8,8 +8,6 @@
  *
  * @author fizikci0147
  */
-//package C12validtools;
-//package Clas12Validtools.src.main.java;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,6 @@ public class C12validtools {
 
         String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
         //String fileName="/Users/michaelnycz/JLAB_Programs/clas_validation_tools/small.hipo";
-       // String fileName="./small.hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
             System.err.println("Cannot find input file.");
@@ -158,9 +155,6 @@ public class C12validtools {
      */
     public void loadMaps() {
         //loadMap(recCalMap,recCalBank,recPartBank,"pindex");
-        //loadMap(recCheMap,recCheBank,recPartBank,"pindex");
-        //loadMap(recSciMap,recSciBank,recPartBank,"pindex");
-        //loadMap(recTrkMap,recTrkBank,recPartBank,"pindex");
     }
 
 
@@ -183,16 +177,7 @@ public class C12validtools {
                 if (bank.getByte("q", loop) == -1) pidCode = 11;
                 else if (bank.getByte("q", loop) == 1) pidCode = 211;
                 else pidCode = 22;
-               /* Validation_Particle New_Particle = new Validation_Particle(
-                        pidCode,
-                        bank.getFloat("px", loop),
-                        bank.getFloat("py", loop),
-                        bank.getFloat("pz", loop),
-                        bank.getFloat("vx", loop),
-                        bank.getFloat("vy", loop),
-                        bank.getFloat("vz", loop),
-                        bank.getFloat("vt",loop),
-                        bank.getFloat("beta",loop));*/
+
                 Particle recParticle = new Particle(
                         pidCode,
                         bank.getFloat("px", loop),
@@ -204,9 +189,7 @@ public class C12validtools {
 
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
-                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.vx()); //thi
-             //   dataGroups.getItem(1).getH1F("hvert_t").fill(New_Particle.particle_vt);
-              //  dataGroups.getItem(1).getH1F("Beta").fill(New_Particle.beta);
+                dataGroups.getItem(1).getH1F("hvert_x").fill(recParticle.vx());
 
             }
         }
