@@ -51,7 +51,8 @@ public class C12validtools {
         ttest.CreateHistos();
 
         //String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
-        String fileName="/Users/michaelnycz/JLAB_Programs/clas_validation_tools/small.hipo";
+        //String fileName="/Users/michaelnycz/JLAB_Programs/clas_validation_tools/small.hipo";
+        String fileName="small.hipo";
         File file = new File(fileName);
         if (!file.exists() || file.isDirectory()) {
             System.err.println("Cannot find input file.");
