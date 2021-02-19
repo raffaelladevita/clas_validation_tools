@@ -73,6 +73,7 @@ public class C12validtools {
     }
 
     private void plotHistos() {
+        /* plotting ....*/
         canvasTabbed.getCanvas("TBT Positive Tracks").divide(2,2);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridX(false);
         canvasTabbed.getCanvas("TBT Positive Tracks").setGridY(false);
@@ -83,8 +84,8 @@ public class C12validtools {
         canvasTabbed.getCanvas("TBT Positive Tracks").cd(2);
         canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_t"));
     }
+    /*creating Histos*/
     private void CreateHistos() {
-
         H1F hi_p_pos = new H1F("hi_p_pos", "hi_p_pos", 100, 0.0, 8.0);
         hi_p_pos.setTitleX("p (GeV)");
         hi_p_pos.setTitleY("Counts");
