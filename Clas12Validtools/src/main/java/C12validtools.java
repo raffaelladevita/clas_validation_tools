@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
+import java.util.HashMap;
 
 import com.sun.prism.Graphics;
 import org.jlab.io.base.DataBank;
@@ -32,10 +33,19 @@ import org.jlab.groot.group.DataGroup;
 import org.jlab.utils.groups.IndexedList;
 
 public class C12validtools {
-
+    static final boolean debug=false;
     int nEvents = 0;
-    private DataBank recBank;
-    private DataBank runBank;
+    DataBank mcBank=null,ctrkBank=null,calBank=null,ctofBank=null;
+    DataBank trkBank=null,tofBank=null,htccBank=null,ltccBank=null;
+    DataBank recPartBank=null,recFtPartBank=null,recTrkBank=null,recFtBank=null;
+    DataBank recCalBank=null,recSciBank=null,recCheBank=null;
+    DataBank ftcBank=null,fthBank=null,ftpartBank=null,recBank=null,runBank=null;
+
+    Map <Integer,List<Integer>> recCalMap=new HashMap<Integer,List<Integer>>();
+    Map <Integer,List<Integer>> recCheMap=new HashMap<Integer,List<Integer>>();
+    Map <Integer,List<Integer>> recSciMap=new HashMap<Integer,List<Integer>>();
+    Map <Integer,List<Integer>> recTrkMap=new HashMap<Integer,List<Integer>>();
+
     IndexedList<DataGroup> dataGroups      = new IndexedList<DataGroup>(1);
     EmbeddedCanvasTabbed   canvasTabbed    = null;
     ArrayList<String>      canvasTabNames  = new ArrayList<String>();
@@ -60,14 +70,17 @@ public class C12validtools {
 
         while (reader.hasEvent()) {
             DataEvent event = reader.getNextEvent();
+            ttest.getBanks(event);
             ttest.ProcessEvent(event);
         }
         reader.close();
+        //create a jframe
         JFrame frame = new JFrame("C12Validtools");
         frame.setSize(1200, 800);
         frame.add(ttest.canvasTabbed);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        //plot histograms
         ttest.plotHistos();
 
     }
@@ -92,7 +105,7 @@ public class C12validtools {
         H1F hvert_x = new H1F("h_px", "h_px", 100, -0.1, 0.1);
         hvert_x.setTitleX("Px");
         hvert_x.setTitleY("Counts");
-        H1F hvert_t = new H1F("hvert_t","hvert_t",500,-100,400);
+        H1F hvert_t = new H1F("hvert_t","hvert_t",500,120,140);
         hvert_t.setTitleX("Vt");
         hvert_t.setTitleY("Counts");
         H1F beta = new H1F("Beta","Beta",100,-1,3);
@@ -122,6 +135,24 @@ public class C12validtools {
     }
 
     private void getBanks(DataEvent de) {
+        ctrkBank    = getBank(de,"CVTRec::Tracks");
+        tofBank     = getBank(de,"FTOF::clusters");
+        trkBank     = getBank(de,"TimeBasedTrkg::TBTracks");
+        recPartBank = getBank(de,"REC::Particle");
+        recFtPartBank = getBank(de,"RECFT::Particle");
+        mcBank      = getBank(de,"MC::Particle");
+        recCheBank  = getBank(de,"REC::Cherenkov");
+        recCalBank  = getBank(de,"REC::Calorimeter");
+        recSciBank  = getBank(de,"REC::Scintillator");
+        ltccBank    = getBank(de,"LTCC::clusters");
+        htccBank    = getBank(de,"HTCC::rec");
+        recTrkBank  = getBank(de,"REC::Track");
+        recFtBank   = getBank(de,"REC::ForwardTagger");
+        ftcBank     = getBank(de,"FTCAL::clusters");
+        fthBank     = getBank(de,"FTHODO::clusters");
+        ftpartBank  = getBank(de,"FT::particles");
+        calBank     = getBank(de,"ECAL::clusters");
+        ctofBank    = getBank(de,"CTOF::hits");
         recBank     = getBank(de,"REC::Event");
         runBank     = getBank(de,"RUN::config");
         loadMaps();
@@ -153,7 +184,10 @@ public class C12validtools {
      *
      */
     public void loadMaps() {
-        //loadMap(recCalMap,recCalBank,recPartBank,"pindex");
+        loadMap(recCalMap,recCalBank,recPartBank,"pindex");
+        loadMap(recCheMap,recCheBank,recPartBank,"pindex");
+        loadMap(recSciMap,recSciBank,recPartBank,"pindex");
+        loadMap(recTrkMap,recTrkBank,recPartBank,"pindex");
     }
 
 
@@ -165,15 +199,23 @@ public class C12validtools {
 
     private void ProcessEvent(DataEvent event) {
         nEvents++;
-        if ((nEvents % 10000) == 0) System.out.println("Analyzed " + nEvents + " events");
+       /* if (recBank==null || recPartBank==null || recFtBank==null || recFtPartBank==null) return;
+        if (debug) {
+            System.out.println("\n\n#############################################################\n");
+            if (ftpartBank!=null) ftpartBank.show();
+            recFtBank.show();
+            recPartBank.show();
+        }*/
 
+        if ((nEvents % 10000) == 0) System.out.println("Analyzed " + nEvents + " events");
        if(event.hasBank("REC::Particle")==true) {
+
             DataBank bank = event.getBank("REC::Particle");
             int rows = bank.rows();
             for (int loop = 0; loop < rows; loop++) {
                 int pidCode = 0;
-                if (bank.getByte("q", loop) == -1) pidCode = 11;
-                else if (bank.getByte("q", loop) == 1) pidCode = 211;
+                if (bank.getByte("charge", loop) == -1) pidCode = 11;
+                else if (bank.getByte("charge", loop) == 1) pidCode = 211;
                 else pidCode = 22;
 
                 Particle recParticle = new Particle(
@@ -181,10 +223,10 @@ public class C12validtools {
                         bank.getFloat("px", loop),
                         bank.getFloat("py", loop),
                         bank.getFloat("pz", loop),
-                        bank.getFloat("Vx", loop),
-                        bank.getFloat("Vy", loop),
-                        bank.getFloat("Vz", loop));
-                float vert_t = bank.getFloat("Vt", loop);
+                        bank.getFloat("vx", loop),
+                        bank.getFloat("vy", loop),
+                        bank.getFloat("vz", loop));
+                float vert_t = bank.getFloat("vt", loop);
 
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
