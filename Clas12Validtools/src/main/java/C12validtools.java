@@ -51,14 +51,15 @@ public class C12validtools extends DetectorResponse {
     EmbeddedCanvasTabbed   canvasTabbed    = null;
     ArrayList<String>      canvasTabNames  = new ArrayList<String>();
     ArrayList<Double>      REC_Data        = new ArrayList<Double>();
-    ArrayList<Particle> REC_DataArray = new ArrayList<>();
+    ArrayList<Particle> REC_DataArray      = new ArrayList<>();
+    List<DetectorResponse> Scint_List      = new ArrayList<>();
 
     public static void main(String[] args){
-        C12validtools ttest = new C12validtools();
+        C12validtools c12vt = new C12validtools();
 
-        ttest.setAnalysisTabNames("TBT Positive Tracks");
+        c12vt.setAnalysisTabNames("REC Particle","Scintillator","Calorimeter");
 
-        ttest.CreateHistos();
+        c12vt.CreateHistos();
 
         String fileName="/Users/fizikci0147/work/clas_work/clas_validation_tools/small.hipo";
         //String fileName="/Users/michaelnycz/JLAB_Programs/clas_validation_tools/small.hipo";
@@ -72,35 +73,44 @@ public class C12validtools extends DetectorResponse {
 
         while (reader.hasEvent()) {
             DataEvent event = reader.getNextEvent();
-            ttest.getBanks(event);
-            ttest.ProcessEvent(event);
+            c12vt.getBanks(event);
+            c12vt.ProcessEvent(event);
         }
         reader.close();
         //create a jframe
         JFrame frame = new JFrame("C12Validtools");
         frame.setSize(1200, 800);
-        frame.add(ttest.canvasTabbed);
+        frame.add(c12vt.canvasTabbed);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         //plot histograms
-        ttest.plotHistos();
+        c12vt.plotHistos();
 
     }
 
     private void plotHistos() {
         /* plotting ....*/
-        canvasTabbed.getCanvas("TBT Positive Tracks").divide(2,2);
-        canvasTabbed.getCanvas("TBT Positive Tracks").setGridX(false);
-        canvasTabbed.getCanvas("TBT Positive Tracks").setGridY(false);
-        canvasTabbed.getCanvas("TBT Positive Tracks").cd(0);
-        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hi_p_pos"));
-        canvasTabbed.getCanvas("TBT Positive Tracks").cd(1);
-        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("h_px"));
-        canvasTabbed.getCanvas("TBT Positive Tracks").cd(2);
-        canvasTabbed.getCanvas("TBT Positive Tracks").draw(dataGroups.getItem(1).getH1F("hvert_t"));
+        //REC tab
+        canvasTabbed.getCanvas("REC Particle").divide(2,2);
+        canvasTabbed.getCanvas("REC Particle").setGridX(false);
+        canvasTabbed.getCanvas("REC Particle").setGridY(false);
+        canvasTabbed.getCanvas("REC Particle").cd(0);
+        canvasTabbed.getCanvas("REC Particle").draw(dataGroups.getItem(1).getH1F("hi_p_pos"));
+        canvasTabbed.getCanvas("REC Particle").cd(1);
+        canvasTabbed.getCanvas("REC Particle").draw(dataGroups.getItem(1).getH1F("h_px"));
+        canvasTabbed.getCanvas("REC Particle").cd(2);
+        canvasTabbed.getCanvas("REC Particle").draw(dataGroups.getItem(1).getH1F("hvert_t"));
+        //Scinttilator tab
+        canvasTabbed.getCanvas("Scintillator").divide(2,2);
+        canvasTabbed.getCanvas("Scintillator").setGridX(false);
+        canvasTabbed.getCanvas("Scintillator").setGridY(false);
+        canvasTabbed.getCanvas("Scintillator").cd(0);
+        canvasTabbed.getCanvas("Scintillator").draw(dataGroups.getItem(2).getH1F("hsc_energy"));
+
     }
     /*creating Histos*/
     private void CreateHistos() {
+        //REC Particle histos
         H1F hi_p_pos = new H1F("hi_p_pos", "hi_p_pos", 100, 0.0, 8.0);
         hi_p_pos.setTitleX("p (GeV)");
         hi_p_pos.setTitleY("Counts");
@@ -119,6 +129,13 @@ public class C12validtools extends DetectorResponse {
         dg_pos.addDataSet(hvert_t,3);
         dg_pos.addDataSet(beta,4);
         dataGroups.add(dg_pos, 1);
+        //Scintillator histos
+        H1F hsc_energy = new H1F("hsc_energy", "hsc_energy", 100, 0.0, 8.0);
+        hsc_energy.setTitleX("Energy");
+        hsc_energy.setTitleY("Counts");
+        DataGroup dscinth = new DataGroup(1,1);
+        dscinth.addDataSet(hsc_energy,1);
+        dataGroups.add(dscinth, 2);
 
     }
     public void setAnalysisTabNames(String... names) {
@@ -238,7 +255,7 @@ public class C12validtools extends DetectorResponse {
                         recPartBank.getFloat("vy", loop),
                         recPartBank.getFloat("vz", loop));
                 float vert_t = recPartBank.getFloat("vt", loop);
-
+                REC_DataArray.add(recParticle);
                 System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
                 dataGroups.getItem(1).getH1F("h_px").fill(recParticle.px());
@@ -249,19 +266,19 @@ public class C12validtools extends DetectorResponse {
         }
 
         if (event.hasBank("REC::Scintillator")){
-            List<DetectorResponse> Scint_List = new ArrayList<>();
             C12validtools Response = new C12validtools();
             int rows = recSciBank.rows();
             for(int loop=0;loop<rows;loop++) {
-                index = recSciBank.getInt("pindex",loop);
-                layer = recSciBank.getByte("layer",loop);
+                index  = recSciBank.getInt("pindex",loop);
+                layer  = recSciBank.getByte("layer",loop);
                 sector = recSciBank.getByte("sector",loop);
                 paddle = recSciBank.getInt("component",loop);
                 energy = recSciBank.getFloat("energy",loop);
-                time = recSciBank.getFloat("time",loop);
+                time   = recSciBank.getFloat("time",loop);
                 x = recSciBank.getFloat("x",loop);
                 y = recSciBank.getFloat("y",loop);
                 z = recSciBank.getFloat("z",loop);
+                dataGroups.getItem(2).getH1F("hsc_energy").fill(energy);
                 Response.setPosition(layer,sector,paddle);
                 Response.setEnergy((energy));
                 Response.setEnergy((time));
