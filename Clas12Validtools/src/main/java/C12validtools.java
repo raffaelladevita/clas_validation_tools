@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import com.sun.prism.Graphics;
 import org.jlab.clas.detector.DetectorResponse;
+import org.jlab.detector.base.DetectorType;
 import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
@@ -46,6 +47,7 @@ public class C12validtools extends DetectorResponse {
     Map <Integer,List<Integer>> recCheMap=new HashMap<Integer,List<Integer>>();
     Map <Integer,List<Integer>> recSciMap=new HashMap<Integer,List<Integer>>();
     Map <Integer,List<Integer>> recTrkMap=new HashMap<Integer,List<Integer>>();
+    Map <Integer,List<Integer>> recFtMap=new HashMap<Integer,List<Integer>>();
 
     IndexedList<DataGroup> dataGroups      = new IndexedList<DataGroup>(1);
     EmbeddedCanvasTabbed   canvasTabbed    = null;
@@ -53,11 +55,14 @@ public class C12validtools extends DetectorResponse {
     ArrayList<Double>      REC_Data        = new ArrayList<Double>();
     ArrayList<Particle> REC_DataArray      = new ArrayList<>();
     List<DetectorResponse> Scint_List      = new ArrayList<>();
+    List<DetectorResponse> Calo_List      = new ArrayList<>();
+    List<DetectorResponse> Ft_List      = new ArrayList<>();
+    List<DetectorResponse> Cher_List      = new ArrayList<>();
 
     public static void main(String[] args){
         C12validtools c12vt = new C12validtools();
 
-        c12vt.setAnalysisTabNames("REC Particle","Scintillator","Calorimeter");
+        c12vt.setAnalysisTabNames("REC Particle","Scintillator","Calorimeter","Cherenkov","Forward Tagger");
 
         c12vt.CreateHistos();
 
@@ -106,6 +111,15 @@ public class C12validtools extends DetectorResponse {
         canvasTabbed.getCanvas("Scintillator").setGridY(false);
         canvasTabbed.getCanvas("Scintillator").cd(0);
         canvasTabbed.getCanvas("Scintillator").draw(dataGroups.getItem(2).getH1F("hsc_energy"));
+        //Calorimeter tab
+        //Scinttilator tab
+        canvasTabbed.getCanvas("Calorimeter").divide(2,2);
+        canvasTabbed.getCanvas("Calorimeter").setGridX(false);
+        canvasTabbed.getCanvas("Calorimeter").setGridY(false);
+        canvasTabbed.getCanvas("Calorimeter").cd(0);
+        canvasTabbed.getCanvas("Calorimeter").draw(dataGroups.getItem(3).getH1F("hcal_energy"));
+        canvasTabbed.getCanvas("Calorimeter").cd(1);
+        canvasTabbed.getCanvas("Calorimeter").draw(dataGroups.getItem(3).getH1F("hcal_path"));
 
     }
     /*creating Histos*/
@@ -136,6 +150,18 @@ public class C12validtools extends DetectorResponse {
         DataGroup dscinth = new DataGroup(1,1);
         dscinth.addDataSet(hsc_energy,1);
         dataGroups.add(dscinth, 2);
+        //Calorimeter hists
+        H1F hcal_energy = new H1F("hcal_energy", "hcal_energy", 100, 0, 8.0);
+        hcal_energy.setTitleX("Energy");
+        hcal_energy.setTitleY("Counts");
+        H1F hcal_path = new H1F("hcal_path", "hcal_path", 100, 500.0, 900.0);
+        hcal_path.setTitleX("Path");
+        hcal_path.setTitleY("Counts");
+        DataGroup dscalh = new DataGroup(1,1);
+        dscalh.addDataSet(hcal_energy,1);
+        dscalh.addDataSet(hcal_path,2);
+        dataGroups.add(dscalh, 3);
+
 
     }
     public void setAnalysisTabNames(String... names) {
@@ -177,10 +203,7 @@ public class C12validtools extends DetectorResponse {
         loadMaps();
     }
 
-    public void loadMap(Map<Integer,List<Integer>> map, 
-            DataBank fromBank, 
-            DataBank toBank, 
-            String idxVarName) {
+    public void loadMap(Map<Integer,List<Integer>> map, DataBank fromBank, DataBank toBank, String idxVarName) {
         map.clear();
         if (fromBank==null) return;
         if (toBank==null) return;
@@ -207,6 +230,7 @@ public class C12validtools extends DetectorResponse {
         loadMap(recCheMap,recCheBank,recPartBank,"pindex");
         loadMap(recSciMap,recSciBank,recPartBank,"pindex");
         loadMap(recTrkMap,recTrkBank,recPartBank,"pindex");
+        loadMap(recFtMap,recFtBank,recPartBank,"pindex");
     }
 
 
@@ -221,13 +245,8 @@ public class C12validtools extends DetectorResponse {
 
     private void ProcessEvent(DataEvent event) {
         nEvents++;
-        int index = 0;
-        float energy = 0;
-        float time=0;
-        float x,y,z=0;
-        int sector;
-        int layer;
-        int paddle=0;
+        //scintillator variables
+        //debug
         if (recBank==null || recPartBank==null || recFtBank==null || recFtPartBank==null) return;
         if (debug) {
             System.out.println("\n\n#############################################################\n");
@@ -235,11 +254,13 @@ public class C12validtools extends DetectorResponse {
             recFtBank.show();
             recPartBank.show();
         }
-
+//Rec particle
         if ((nEvents % 10000) == 0) System.out.println("Analyzed " + nEvents + " events");
        if(event.hasBank("REC::Particle")==true) {
 
             int rows = recPartBank.rows();
+           System.out.println("rows recbank: ");
+            System.out.println(rows);
             for (int loop = 0; loop < rows; loop++) {
                 int pidCode = 0;
                 if (recPartBank.getByte("charge", loop) == -1) pidCode = 11;
@@ -256,7 +277,7 @@ public class C12validtools extends DetectorResponse {
                         recPartBank.getFloat("vz", loop));
                 float vert_t = recPartBank.getFloat("vt", loop);
                 REC_DataArray.add(recParticle);
-                System.out.println(recParticle.charge());
+                //System.out.println(recParticle.charge());
                 dataGroups.getItem(1).getH1F("hi_p_pos").fill(recParticle.p());
                 dataGroups.getItem(1).getH1F("h_px").fill(recParticle.px());
                 dataGroups.getItem(1).getH1F("hvert_t").fill(vert_t);
@@ -264,33 +285,149 @@ public class C12validtools extends DetectorResponse {
 
             }
         }
-
+//Scintillator
         if (event.hasBank("REC::Scintillator")){
             C12validtools Response = new C12validtools();
             int rows = recSciBank.rows();
+            System.out.println("rows scint: ");
+            System.out.println(rows);
             for(int loop=0;loop<rows;loop++) {
-                index  = recSciBank.getInt("pindex",loop);
-                layer  = recSciBank.getByte("layer",loop);
-                sector = recSciBank.getByte("sector",loop);
-                paddle = recSciBank.getInt("component",loop);
-                energy = recSciBank.getFloat("energy",loop);
-                time   = recSciBank.getFloat("time",loop);
-                x = recSciBank.getFloat("x",loop);
-                y = recSciBank.getFloat("y",loop);
-                z = recSciBank.getFloat("z",loop);
-                dataGroups.getItem(2).getH1F("hsc_energy").fill(energy);
+             int   index  = recSciBank.getInt("pindex",loop);
+             int   layer  = recSciBank.getByte("layer",loop);
+             int   sector = recSciBank.getByte("sector",loop);
+             int   paddle = recSciBank.getInt("component",loop);
+             float   energy = recSciBank.getFloat("energy",loop);
+             float   time   = recSciBank.getFloat("time",loop);
+              float  x    = recSciBank.getFloat("x",loop);
+              float  y    = recSciBank.getFloat("y",loop);
+              float  z    = recSciBank.getFloat("z",loop);
+              float  hx   = recSciBank.getFloat("hx",loop);
+              float  hy   = recSciBank.getFloat("hy",loop);
+              float  hz   = recSciBank.getFloat("hz",loop);
+              float  path = recSciBank.getFloat("path",loop);
+                dataGroups.getItem(2).getH1F("hsc_energy").fill(hx);
                 Response.setPosition(layer,sector,paddle);
                 Response.setEnergy((energy));
                 Response.setEnergy((time));
+
             }
             Scint_List.add(Response);
             //Energy.put(nEvents,energy);
+        }
+//Calorimeter
+        if (event.hasBank("REC::Calorimeter")){
+            C12validtools Response = new C12validtools();
+           // DetectorType type = null;
+            int rows = recCalBank.rows();
+            System.out.println("rows Calo: ");
+            System.out.println(rows);
+            for(int loop=0;loop<rows;loop++) {
+                int sector = recCalBank.getByte("sector", loop);
+                int layer = recCalBank.getByte("layer", loop);
+
+                float x = recCalBank.getFloat("x", loop);
+                float y = recCalBank.getFloat("y", loop);
+                float z = recCalBank.getFloat("z", loop);
+                float hx = recCalBank.getFloat("hx", loop);
+                float hy = recCalBank.getFloat("hy", loop);
+                float hz = recCalBank.getFloat("hz", loop);
+                float path = recCalBank.getFloat("path", loop);
+                float energy = recCalBank.getFloat("energy", loop);
+                //float u = recCalBank.getFloat("widthu",loop);
+                //float v = recCalBank.getFloat("widthu",loop);
+                //float w = recCalBank.getFloat("widthw",loop);
+                //Response.getDescriptor().setType(type);
+                Response.setPosition(x, y, z);
+                Response.setHitIndex(loop);
+                Response.setEnergy(energy);
+                Response.setTime(recCalBank.getFloat("time", loop));
+                Response.setStatus(recCalBank.getInt("status",loop));
+                dataGroups.getItem(3).getH1F("hcal_energy").fill(energy);
+                dataGroups.getItem(3).getH1F("hcal_path").fill(path);
+            }
+            Calo_List.add(Response);
+        }
+//CHERENKOV
+
+        DetectorType type=null;
+        if (event.hasBank("REC::Cherenkov")){
+            C12validtools Response = new C12validtools();
+            // DetectorType type = null;
+            int rows = recCheBank.rows();
+            System.out.println("rows Cherenkov: ");
+            System.out.println(rows);
+            for(int loop=0;loop<rows;loop++) {
+                float x = recCheBank.getFloat("x", loop);
+                float y = recCheBank.getFloat("y", loop);
+                float z = recCheBank.getFloat("z", loop);
+                float hx = recCheBank.getFloat("hx", loop);
+                float hy = recCheBank.getFloat("hy", loop);
+                float hz = recCheBank.getFloat("hz", loop);
+                double time = recCheBank.getFloat("time",loop);
+                double nphe = recCheBank.getFloat("nphe", loop);
+                double theta = Math.atan2(Math.sqrt(x*x+y*y),z);
+                double phi   = Math.atan2(y,x);
+                int sector = 0;
+
+                double dtheta=0,dphi=0;
+                if (type==DetectorType.HTCC) {
+                    dtheta = 10*3.14159/180; // based on MC
+                    dphi   = 18*3.14159/180; // based on MC
+                    // HTCC reconstruction does not provide a sector,
+                    // so we calculate it based on hit position:
+                    sector = DetectorResponse.getSector(phi);
+                }
+                else if (type==DetectorType.LTCC) {
+                    dtheta = (35-5)/18*2 * 3.14159/180; // +/- 2 mirrors
+                    dphi   = 10*3.14159/180;
+                    sector = recCheBank.getByte("sector",loop);
+                }
+
+                //dataGroups.getItem(3).getH1F("hcal_energy").fill(energy);
+               // dataGroups.getItem(3).getH1F("hcal_path").fill(path);
+            }
+            //Calo_List.add(Response);
+        }
+// FORWARD TAGGER
+        if (event.hasBank("REC::ForwardTagger")){
+            C12validtools Response = new C12validtools();
+            // DetectorType type = null;
+            int rows = recFtBank.rows();
+            System.out.println("rows Forward Tracker: ");
+            System.out.println(rows);
+            for(int loop=0;loop<rows;loop++) {
+
+                int id  = recFtBank.getShort("id", loop);
+                int size = recFtBank.getShort("size", loop);
+                double x = recFtBank.getFloat("x",loop);
+                double y = recFtBank.getFloat("y",loop);
+                double z = recFtBank.getFloat("z",loop);
+                double dx = recFtBank.getFloat("widthX",loop);
+                double dy = recFtBank.getFloat("widthY",loop);
+                double radius = recFtBank.getFloat("radius", loop);
+                double time = recFtBank.getFloat("time",loop);
+                double energy = recFtBank.getFloat("energy",loop);
+
+                double z0 = 0; // FIXME vertex
+                double path = Math.sqrt(x*x+y*y+(z-z0)*(z-z0));
+                double cx = x / path;
+                double cy = y / path;
+                double cz = (z-z0) / path;
+
+                Response.setPosition(x, y, z);
+                Response.setHitIndex(loop);
+                Response.setEnergy(energy);
+                Response.setTime(time);
+               // dataGroups.getItem(3).getH1F("hcal_energy").fill(energy);
+                //dataGroups.getItem(3).getH1F("hcal_path").fill(path);
+            }
+           Ft_List.add(Response);
         }
 
     }
 
     public void Read_RECArray(ArrayList<Particle> Data) {
-;
+
         System.out.println(Data.get(0));
         System.out.println(Data.get(1));
         System.out.println(Data.size());
