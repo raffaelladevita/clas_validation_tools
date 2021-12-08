@@ -18,6 +18,7 @@ import org.jlab.io.base.DataEvent;
 /**
  *
  * @author fizikci0147
+ * @author devita
  */
 public class Event {
     private boolean debug = false;
