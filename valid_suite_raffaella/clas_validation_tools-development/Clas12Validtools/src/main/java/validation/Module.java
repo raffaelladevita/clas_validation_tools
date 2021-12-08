@@ -111,13 +111,13 @@ public class Module {
         }            
     }
 
-    public F1D fitGauss(H1F histo) {
+    public F1D fitGauss(H1F histo,double min, double max) {
         double tmp_Mean = histo.getMean();
         int Max_Bin = histo.getMaximumBin();
         double tmp_Amp = histo.getBinContent(Max_Bin);
         double tmp_sigma = histo.getRMS();
         //System.out.println(tmp_Amp);
-        F1D f1 = new F1D("f1", "[amp]*gaus(x,[mean],[sigma])", 0, 50.0);
+        F1D f1 = new F1D("f1", "[amp]*gaus(x,[mean],[sigma])",min,max);
         f1.setParameter(0, tmp_Amp);
         f1.setParameter(1, tmp_Mean);
         f1.setParameter(2, tmp_sigma / 2);

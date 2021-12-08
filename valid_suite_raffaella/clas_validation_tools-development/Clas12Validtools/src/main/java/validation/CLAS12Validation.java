@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import modules.FTOFModule;
+import modules.CTOFModule;
+import modules.CNDModule;
 import modules.HTCCModule;
+import modules.LTCCModule;
+import modules.ECALModule;
+import modules.FTModule;
+import modules.EventBuilderModule;
 
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
@@ -97,7 +103,14 @@ public class CLAS12Validation {
 
     private void init() {
         this.modules.add(new FTOFModule());
+        this.modules.add(new CTOFModule());
+        this.modules.add(new CNDModule());
         this.modules.add(new HTCCModule());
+        this.modules.add(new LTCCModule());
+        this.modules.add(new ECALModule());
+        this.modules.add(new FTModule());
+        this.modules.add(new EventBuilderModule());
+
     }
 
     private void processEvent(DataEvent de) {
@@ -120,6 +133,9 @@ public class CLAS12Validation {
             if(canvas==null) canvas = new EmbeddedCanvasTabbed(cname);
             else             canvas.addCanvas(cname);
             canvas.getCanvas(cname).draw(m.getHistos());
+
+            System.out.println("Saving histograms to file " + cname);
+
         }
         return canvas;
     }
@@ -150,7 +166,6 @@ public class CLAS12Validation {
             m.testHistos();
         }
     }
-    
         public static void main(String[] args) {
         
         OptionParser parser = new OptionParser("clas12Validation");
