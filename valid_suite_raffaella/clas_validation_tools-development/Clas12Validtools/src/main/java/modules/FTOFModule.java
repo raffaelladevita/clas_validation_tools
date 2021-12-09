@@ -36,6 +36,7 @@ public class FTOFModule extends Module {
         for(int key : event.getFTOFMap().keySet()) {
             for(DetectorResponse r : event.getFTOFMap().get(key)) {
                 ScintillatorResponse response= (ScintillatorResponse) r;
+                int layer = response.getDescriptor().getLayer();
                 this.getHistos().getH1F("hsc_energy").fill(response.getEnergy());
 
             }

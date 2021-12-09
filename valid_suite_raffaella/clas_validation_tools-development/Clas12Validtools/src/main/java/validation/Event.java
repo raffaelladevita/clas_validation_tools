@@ -5,11 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jlab.clas.detector.CalorimeterResponse;
-import org.jlab.clas.detector.CherenkovResponse;
-import org.jlab.clas.detector.DetectorResponse;
-import org.jlab.clas.detector.ScintillatorResponse;
-import org.jlab.clas.detector.TaggerResponse;
+import org.jlab.clas.detector.*;
 import org.jlab.clas.physics.Particle;
 import org.jlab.detector.base.DetectorType;
 import org.jlab.io.base.DataBank;
@@ -44,7 +40,8 @@ public class Event {
     private Map<Integer, List<DetectorResponse>>  cndMap  = new HashMap<>();
     private Map<Integer, List<DetectorResponse>>  dcMap   = new HashMap<>();
     private Map<Integer, List<DetectorResponse>>  cvtMap  = new HashMap<>();
-    private Map<Integer, List<DetectorResponse>>  ftMap   = new HashMap<>();
+    private Map<Integer, List<DetectorResponse>>  ftMap   = new HashMap<>(); //ftc
+    private Map<Integer, List<DetectorResponse>>  fthMap   = new HashMap<>();
 
 
     public Event(DataEvent event) {
@@ -249,6 +246,9 @@ public class Event {
 
                 if(detector == DetectorType.FTCAL.getDetectorId()) { //FT or FTCAL ??j
                     this.loadMap(ftMap, response);
+                }else if(detector == DetectorType.FTHODO.getDetectorId()) {
+                    this.loadMap(fthMap, response);
+
                 }
             }
         }
@@ -266,12 +266,12 @@ public class Event {
             int NDF = recTrkBank.getInt("NDF", loop);
             int detector = recTrkBank.getByte("detector", loop);
             int sector = recTrkBank.getByte("sector", loop);
-            DetectorResponse response = new DetectorResponse();
+            //DetectorTrack response =new DetectorTrack();
 
             if (detector == DetectorType.DC.getDetectorId()) {
-                this.loadMap(dcMap, response);
+                //this.loadMap(dcMap, response);
             } else if (detector == DetectorType.CVT.getDetectorId()) {
-                this.loadMap(cvtMap, response);
+                //this.loadMap(cvtMap, response);
             }
 
         }

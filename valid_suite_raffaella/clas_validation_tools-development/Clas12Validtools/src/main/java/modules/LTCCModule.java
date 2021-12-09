@@ -36,7 +36,7 @@ public class LTCCModule extends Module {
         hcher_theta.setTitleX("#theta");
         hcher_theta.setTitleY("Counts");
         DataGroup dscher = new DataGroup(1, 1);
-        dscher.addDataSet(hcher_nphe,  0);
+        dscher.addDataSet(hcher_nphe, 0);
         //dscher.addDataSet(hcher_time,  1);
         //dscher.addDataSet(hcher_phi,   2);
         //dscher.addDataSet(hcher_theta, 3);
@@ -45,28 +45,30 @@ public class LTCCModule extends Module {
 
     @Override
     public void analyzeHistos() {
-        this.fitGauss(this.getHistos().getH1F("hcher_nphe"),0,50);
+        this.fitGauss(this.getHistos().getH1F("hcher_nphe"), 0, 50);
     }
 
     @Override
     public void fillHistos(Event event) {
-        if(event.getParticles().size()>0) {
-            int pid      = event.getParticles().get(0).pid();
-            int status   = (int) event.getParticles().get(0).getProperty("status");
-            int detector = (int) Math.abs(status)/1000;
+        if (event.getParticles().size() > 0) {
+
+            int pid = event.getParticles().get(0).pid();
+            int status = (int) event.getParticles().get(0).getProperty("status");
+            int detector = (int) Math.abs(status) / 1000;
             //System.out.println(detector);
-            if(pid==11 && detector == 4) { //detector for LTCC
-                for(DetectorResponse r : event.getLTCCMap().get(0)) {
-                    CherenkovResponse response = (CherenkovResponse) r;
-                    this.getHistos().getH1F("hcher_nphe").fill(response.getNphe());
-                    this.getHistos().getH1F("hcher_time").fill(response.getTime());
-                    this.getHistos().getH1F("hcher_phi").fill(Math.toDegrees(response.getHitPosition().toVector3D().phi()));
-                    this.getHistos().getH1F("hcher_theta").fill(Math.toDegrees(response.getHitPosition().toVector3D().theta()));
-               }
+            if (event.getLTCCMap().get(0) != null) {
+                if (pid == 11 && detector == -2) { //detector for LTCC
+                    for (DetectorResponse r : event.getLTCCMap().get(0)) {
+                        CherenkovResponse response = (CherenkovResponse) r;
+                        this.getHistos().getH1F("hcher_nphe").fill(response.getNphe());
+                        this.getHistos().getH1F("hcher_time").fill(response.getTime());
+                        this.getHistos().getH1F("hcher_phi").fill(Math.toDegrees(response.getHitPosition().toVector3D().phi()));
+                        this.getHistos().getH1F("hcher_theta").fill(Math.toDegrees(response.getHitPosition().toVector3D().theta()));
+                    }
+                }
             }
         }
     }
-
     @Override
     public void testHistos() {
       double npe = this.getHistos().getH1F("hcher_nphe").getMean();
