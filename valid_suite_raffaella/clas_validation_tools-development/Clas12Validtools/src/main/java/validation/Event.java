@@ -254,27 +254,27 @@ public class Event {
         }
     }
 
-    private void readDCResponses(){
-        if (recTrkBank!= null)
+    private void readTrackResponses(){
+        if (recTrkBank!= null){
             dcMap.clear();
             cvtMap.clear();
         int rows = recTrkBank.rows();
         for (int loop = 0; loop < rows; loop++) {
-            int index    = recTrkBank.getInt("index", loop);
-            int pindex   = recTrkBank.getInt("pindex", loop);
-            double chi2  = recTrkBank.getFloat("chi2",loop);
-            double NDF   =recTrkBank.getFloat("NDF",loop);
-            int detector =recTrkBank.getByte("detector",loop);
-            int sector   = recTrkBank.getByte("sector", loop);
-            DetectorResponse response =new DetectorResponse();
+            int index = recTrkBank.getInt("index", loop);
+            int pindex = recTrkBank.getInt("pindex", loop);
+            double chi2 = recTrkBank.getFloat("chi2", loop);
+            int NDF = recTrkBank.getInt("NDF", loop);
+            int detector = recTrkBank.getByte("detector", loop);
+            int sector = recTrkBank.getByte("sector", loop);
+            DetectorResponse response = new DetectorResponse();
 
-            if(detector == DetectorType.DC.getDetectorId()) {
+            if (detector == DetectorType.DC.getDetectorId()) {
                 this.loadMap(dcMap, response);
-            } else if(detector == DetectorType.CVT.getDetectorId()) {
+            } else if (detector == DetectorType.CVT.getDetectorId()) {
                 this.loadMap(cvtMap, response);
             }
 
-
+        }
         }
     }
         
@@ -296,6 +296,7 @@ public class Event {
         this.readCherenkovResponses();
         this.readCalorimeterResponses();
         this.readTaggerResponses();
+        this.readTrackResponses();
 
     }
 

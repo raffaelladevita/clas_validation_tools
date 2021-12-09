@@ -37,4 +37,16 @@ public class CNDModule extends Module {
         }
     }
 
+    @Override
+    public void testHistos() {
+        //double npe = this.getHistos().getH1F("hcher_nphe").getMean();
+        System.out.println("\n#############################################################");
+        //System.out.println(String.format("npe/Events = %.3f", npe));;
+        System.out.println("#############################################################");
+        //  assertEquals(npe>0.15,true);
+
+    }
+   /* @Override
+    public void analyzeHistos() {this.fitGauss(this.getHistos().getH1F("hcher_nphe"),0,50);}*/
+
 }

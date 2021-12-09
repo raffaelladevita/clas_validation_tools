@@ -36,11 +36,11 @@ public class EventBuilderModule extends Module {
     }
     @Override
     public void testHistos() {
-        double mean = this.getHistos().getH1F("hcal_energy").getMean();
+  /*      double mean = this.getHistos().getH1F("hcal_energy").getMean();
         System.out.println("\n#############################################################");
         System.out.println(String.format("mean = %.3f", mean));;
         System.out.println("#############################################################");
-        //assertEquals(mean>0.2&&mean<0.3,true);
-
+         //assertEquals(mean>0.2&&mean<0.3,true);
+*/
     }
 }

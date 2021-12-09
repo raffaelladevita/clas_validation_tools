@@ -23,7 +23,7 @@ public class FTOFModule extends Module {
         H1F hsc_energy = new H1F("hsc_energy", "hsc_energy", 1000, 0.0, 300.0);
         hsc_energy.setTitleX("Energy");
         hsc_energy.setTitleY("Counts");
-        DataGroup dscinth = new DataGroup(2, 2);
+        DataGroup dscinth = new DataGroup(1, 1);
         dscinth.addDataSet(hsc_energy, 0);
         dscinth.addDataSet(hsc_energy, 1);
         dscinth.addDataSet(hsc_energy, 2);
@@ -41,5 +41,17 @@ public class FTOFModule extends Module {
             }
         }
     }
+
+    @Override
+    public void testHistos() {
+        //double npe = this.getHistos().getH1F("hcher_nphe").getMean();
+        System.out.println("\n#############################################################");
+        //System.out.println(String.format("npe/Events = %.3f", npe));;
+        System.out.println("#############################################################");
+        //  assertEquals(npe>0.15,true);
+
+    }
+   /* @Override
+    public void analyzeHistos() {this.fitGauss(this.getHistos().getH1F("hcher_nphe"),0,50);}*/
 
 }
