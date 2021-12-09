@@ -22,7 +22,7 @@ public class ECALModule extends Module {
 
     @Override
     public void createHistos() {
-        H1F hcal_energy = new H1F("hcal_energy", "hcal_energy", 100, 0, 2.0);
+        H1F hcal_energy = new H1F("hcal_energy", "hcal_energy", 100, 0., 2.0);
         hcal_energy.setTitleX("Energy");
         hcal_energy.setTitleY("Counts");
         DataGroup dscalh = new DataGroup(1, 1);
@@ -31,7 +31,7 @@ public class ECALModule extends Module {
     }
     @Override
     public void analyzeHistos() {
-        this.fitGauss(this.getHistos().getH1F("hcal_energy"),0.,2.);
+        this.fitGauss(this.getHistos().getH1F("hcal_energy"),0.,0.5);
     }
 
     @Override
@@ -42,12 +42,10 @@ public class ECALModule extends Module {
             for (DetectorResponse r : event.getECALMap().get(key)) {
                 CalorimeterResponse response = (CalorimeterResponse) r;
                 int pid = event.getParticles().get(0).pid();
-                double Ep   = (int) event.getParticles().get(0).p();
+                double Ep   =  event.getParticles().get(0).p();
                 if(pid==11) {
-                    this.getHistos().getH1F("hcal_energy").fill(response.getEnergy());
-
-
-               }
+                    this.getHistos().getH1F("hcal_energy").fill(response.getEnergy()/Ep);
+                }
             }
         }
     }

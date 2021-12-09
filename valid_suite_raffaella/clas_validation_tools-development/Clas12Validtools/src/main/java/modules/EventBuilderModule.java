@@ -18,11 +18,11 @@ public class EventBuilderModule extends Module {
 
     @Override
     public void createHistos() {
-        H1F h_px = new H1F("h_px", "h_px", 100, -0.1, 0.1);
-        h_px.setTitleX("Px");
-        h_px.setTitleY("Counts");
+        H1F h_p = new H1F("h_p", "h_p", 500, 0.0, 10);
+        h_p.setTitleX("P");
+        h_p.setTitleY("Counts");
        DataGroup devent = new DataGroup(1, 1);
-       devent.addDataSet(h_px, 0);
+       devent.addDataSet(h_p, 0);
        this.setHistos(devent);
 
     }
@@ -31,7 +31,7 @@ public class EventBuilderModule extends Module {
     public void fillHistos(Event event) {
 
         for (Particle r : event.getParticles()) {
-                this.getHistos().getH1F("h_px").fill(r.px());
+                this.getHistos().getH1F("h_p").fill(r.p());
         }
     }
     @Override
