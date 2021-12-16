@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a02ae963-bf1f-4986-8a03-47268ae67876" name="Default Changelist" comment="comments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/EventBuilderModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/EventBuilderModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/ECALModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/ECALModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/FTOFModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/FTOFModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/HTCCModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/HTCCModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/LTCCModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/LTCCModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/Event.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/FTOFModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/FTOFModule.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/HTCCModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/HTCCModule.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/target/classes/validation/Event.class" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/target/classes/validation/Event.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/histo.hipo" beforeDir="false" afterPath="$PROJECT_DIR$/histo.hipo" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639027349295</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="comments">
+      <created>1639066273656</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1639066273656</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

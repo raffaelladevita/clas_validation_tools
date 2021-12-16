@@ -37,13 +37,13 @@ public class ECALModule extends Module {
     @Override
     public void fillHistos(Event event) {
         if (event.getParticles().size() > 0) {
-
+            int pid = event.getParticles().get(0).pid();
+            double Ep   =  event.getParticles().get(0).p();
+            if(pid==11) {
         for (int key : event.getECALMap().keySet()) {
             for (DetectorResponse r : event.getECALMap().get(key)) {
                 CalorimeterResponse response = (CalorimeterResponse) r;
-                int pid = event.getParticles().get(0).pid();
-                double Ep   =  event.getParticles().get(0).p();
-                if(pid==11) {
+
                     this.getHistos().getH1F("hcal_energy").fill(response.getEnergy()/Ep);
                 }
             }
