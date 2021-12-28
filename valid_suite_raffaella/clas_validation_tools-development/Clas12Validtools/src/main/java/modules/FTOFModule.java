@@ -51,9 +51,9 @@ public class FTOFModule extends Module {
                     ScintillatorResponse response = (ScintillatorResponse) r;
                     int layer = response.getDescriptor().getLayer();
                     if (layer == 2) {
-                        double vertt = response.getTime() - response.getPath() / c - vt;
+                        double vertt = response.getTime() - response.getPath()/c - vt;
                         this.getHistos().getH1F("hsvt").fill(vertt);
-                        System.out.println(response.getTime());
+                       // System.out.println(response.getTime());
                     }
                 }
                 }

@@ -11,6 +11,8 @@ import modules.LTCCModule;
 import modules.ECALModule;
 import modules.FTModule;
 import modules.EventBuilderModule;
+import modules.DCTRACKSModule;
+import modules.CVTTRACKSModule;
 
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
@@ -110,6 +112,8 @@ public class CLAS12Validation {
         this.modules.add(new ECALModule());
         this.modules.add(new FTModule());
         this.modules.add(new EventBuilderModule());
+        this.modules.add(new DCTRACKSModule());
+        this.modules.add(new CVTTRACKSModule());
 
     }
 

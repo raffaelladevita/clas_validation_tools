@@ -21,20 +21,44 @@ public class CNDModule extends Module {
         H1F hsc_energy = new H1F("hsc_energy", "hsc_energy", 1000, 0.0, 300.0);
         hsc_energy.setTitleX("Energy");
         hsc_energy.setTitleY("Counts");
+        H1F hsvt = new H1F("hsvt", "hsvt", 1000, 0.0, 300.0);
+        hsvt.setTitleX("Electron Vertex Time");
+        hsvt.setTitleY("Counts");
         DataGroup dscinth = new DataGroup(1, 1);
-        dscinth.addDataSet(hsc_energy, 0);
+        dscinth.addDataSet(hsvt, 0);
         this.setHistos(dscinth);
 
     }
 
     @Override
     public void fillHistos(Event event) {
-        for(int key : event.getCNDMap().keySet()) {
+        if (event.getParticles().size() > 0 &&event.getFTOFMap().get(0)!=null) {
+            int pid = event.getParticles().get(0).pid();
+            int status = (int) event.getParticles().get(0).getProperty("status");
+            int detector = (int) Math.abs(status) / 1000;
+            double c = 3.e8;//m/s
+            double vt =event.getParticles().get(0).getProperty("vt");
+            if (pid == -211) {
+                for(int key : event.getFTOFMap().keySet()) {
+                    for (DetectorResponse r : event.getFTOFMap().get(key)) {
+                        ScintillatorResponse response = (ScintillatorResponse) r;
+                        int layer = response.getDescriptor().getLayer();
+                        if (layer == 2) {
+                            double vertt = response.getTime() - response.getPath()/c - vt;
+                            this.getHistos().getH1F("hsvt").fill(vertt);
+                            // System.out.println(response.getTime());
+                        }
+                    }
+                }
+            }
+        }
+
+        /*for(int key : event.getCNDMap().keySet()) {
             for(DetectorResponse r : event.getCNDMap().get(key)) {
                 ScintillatorResponse response = (ScintillatorResponse) r;
                 this.getHistos().getH1F("hsc_energy").fill(response.getEnergy());
             }
-        }
+        }*/
     }
 
     @Override

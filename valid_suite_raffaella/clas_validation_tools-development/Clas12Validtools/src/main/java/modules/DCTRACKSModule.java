@@ -5,6 +5,7 @@ import validation.Event;
 import validation.Module;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.group.DataGroup;
+import org.jlab.clas.physics.Particle;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,8 +25,15 @@ public class DCTRACKSModule extends Module {
         H1F hchi2 = new H1F("hchi2", "hchi2", 100, 0, 10.0);
         hchi2.setTitleX("Chi2");
         hchi2.setTitleY("Counts");
-        DataGroup ddctrk = new DataGroup(1, 1);
-        ddctrk.addDataSet(hchi2, 0);
+        H1F hvzn = new H1F("hvzn", "hvzn", 100, 0, 10.0);
+        hvzn.setTitleX("Vz");
+        hvzn.setTitleY("Counts");
+        H1F hvzp = new H1F("hvzp", "hvzp", 100, 0, 10.0);
+        hvzp.setTitleX("Vz");
+        hvzp.setTitleY("Counts");
+        DataGroup ddctrk = new DataGroup(2, 1);
+        ddctrk.addDataSet(hvzn, 0);
+        ddctrk.addDataSet(hvzp, 1);
         this.setHistos(ddctrk);
     }
     @Override
@@ -35,14 +43,16 @@ public class DCTRACKSModule extends Module {
 
     @Override
     public void fillHistos(Event event) {
-            for (int key : event.getDCTrkMap().keySet()) {
-                for (DetectorResponse r : event.getDCTrkMap().get(key)) {
-                   // CalorimeterResponse response = (CalorimeterResponse) r;
-                    int pid = event.getParticles().get(0).pid();
-                    double Ep   = (int) event.getParticles().get(0).p();
-                    //    this.getHistos().getH1F("hcal_energy").fill(response.getEnergy());
-                }
+
+        for (int i =0;i<event.getParticles().size();i++) {
+            Particle r = event.getParticles().get(i);
+            int charge = r.charge();
+            if (charge == 1) {
+                this.getHistos().getH1F("hvzn").fill(r.vz());
+            }else if(charge==-1){
+                this.getHistos().getH1F("hvzp").fill(r.vz());
             }
+        }
     }
 
     @Override

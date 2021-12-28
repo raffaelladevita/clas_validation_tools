@@ -22,11 +22,11 @@ public class EventBuilderModule extends Module {
 
     @Override
     public void createHistos() {
-        H1F h_m1 = new H1F("h_m1", "h_m1", 500, 0.0, 10);
+        H1F h_m1 = new H1F("h_m1", "h_m1", 500, -0.01 , 0.05);
         h_m1.setTitleX("Mpi0");
         h_m1.setTitleY("Counts");
 
-        H1F h_m2 = new H1F("h_m1", "h_m1", 500, 0.0, 10);
+        H1F h_m2 = new H1F("h_m2", "h_m2", 500, 0.0, 500);
         h_m2.setTitleX("Mpi0");
         h_m2.setTitleY("Counts");
 
@@ -46,8 +46,11 @@ public class EventBuilderModule extends Module {
         double mass1=0., mass2=0.;
         for (int i =0;i<event.getParticles().size();i++) {
             Particle r = event.getParticles().get(i);
-            if (r.pid() == 22&&event.getECALMap().get(i)!=null) {
-                Ecalphoton.add(r);
+        //    if (r.pid() == 22&&event.getECALMap().get(i)!=null) {
+                if (r.pid() == 22) {
+
+
+                    Ecalphoton.add(r);
                 LorentzVector v0 = r.vector();
                 LorentzVector v1 = r.vector();
                 LorentzVector vt = new LorentzVector(v0);
