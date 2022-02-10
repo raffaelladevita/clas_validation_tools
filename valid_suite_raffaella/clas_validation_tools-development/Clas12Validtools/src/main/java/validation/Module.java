@@ -110,7 +110,7 @@ public class Module {
             }
         }            
     }
-
+//gaussian fit
     public F1D fitGauss(H1F histo,double min, double max) {
         double tmp_Mean = histo.getMean();
         int Max_Bin = histo.getMaximumBin();

@@ -8,11 +8,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CNDModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CNDModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CTOFModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CTOFModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CVTTRACKSModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/CVTTRACKSModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/DCTRACKSModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/DCTRACKSModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/EventBuilderModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/EventBuilderModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/FTOFModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/modules/FTOFModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/CLAS12Validation.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/CLAS12Validation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/Module.java" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/src/main/java/validation/Module.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/FTOFModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/target/classes/modules/FTOFModule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clas12Validtools/target/classes/validation/CLAS12Validation.class" beforeDir="false" afterPath="$PROJECT_DIR$/Clas12Validtools/target/classes/validation/CLAS12Validation.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/histo.hipo" beforeDir="false" afterPath="$PROJECT_DIR$/histo.hipo" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639631393855</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="comments">
+      <created>1640706999548</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1640706999548</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -201,6 +208,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="comments" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/clas_validation_tools_development$clas12Validation.ic" NAME="clas12Validation Coverage Results" MODIFIED="1639633825311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/clas_validation_tools_development$clas12Validation.ic" NAME="clas12Validation Coverage Results" MODIFIED="1644462953767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -46,30 +46,29 @@ public class EventBuilderModule extends Module {
         double mass1=0., mass2=0.;
         for (int i =0;i<event.getParticles().size();i++) {
             Particle r = event.getParticles().get(i);
-        //    if (r.pid() == 22&&event.getECALMap().get(i)!=null) {
-                if (r.pid() == 22) {
-
-
+           if (r.pid() == 22&&event.getECALMap().get(i)!=null) {
+               //System.out.println(r.e());
                     Ecalphoton.add(r);
-                LorentzVector v0 = r.vector();
-                LorentzVector v1 = r.vector();
+            }
+            if(Ecalphoton.size()>=2){
+                LorentzVector v0 = Ecalphoton.get(0).vector();
+                LorentzVector v1 = Ecalphoton.get(1).vector();
                 LorentzVector vt = new LorentzVector(v0);
                 vt.add(v1);
                 mass1 = vt.mass();
-            }
-            if(Ecalphoton.size()>=2){
-            this.getHistos().getH1F("h_m1").fill(mass1);}
 
+            this.getHistos().getH1F("h_m1").fill(mass1);}
             if (r.pid() == 22&&event.getFTMap().get(i)!=null) {
                 FTcalphoton.add(r);
-                LorentzVector v0 = r.vector();
-                LorentzVector v1 = r.vector();
-                LorentzVector vt = new LorentzVector(v0);
-                vt.add(v1);
-                mass2 = vt.mass();
             }
 
             if(FTcalphoton.size()>=2) {
+                LorentzVector v0 =FTcalphoton.get(0).vector();
+                LorentzVector v1 = FTcalphoton.get(1).vector();
+                LorentzVector vt = new LorentzVector(v0);
+                vt.add(v1);
+                mass2 = vt.mass();
+
                 this.getHistos().getH1F("h_m2").fill(mass2);
             }
         }

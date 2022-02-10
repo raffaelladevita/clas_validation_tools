@@ -25,7 +25,7 @@ public class FTOFModule extends Module {
         H1F hsc_energy = new H1F("hsc_energy", "hsc_energy", 1000, 0.0, 300.0);
         hsc_energy.setTitleX("Energy");
         hsc_energy.setTitleY("Counts");
-        H1F hsvt = new H1F("hsvt", "hsvt", 1000, 0.0, 300.0);
+        H1F hsvt = new H1F("hsvt", "hsvt", 1000, -170.0, -130.0);
         hsvt.setTitleX("Electron Vertex Time");
         hsvt.setTitleY("Counts");
         DataGroup dscinth = new DataGroup(1, 1);
@@ -43,7 +43,7 @@ public class FTOFModule extends Module {
             int pid = event.getParticles().get(0).pid();
             int status = (int) event.getParticles().get(0).getProperty("status");
             int detector = (int) Math.abs(status) / 1000;
-            double c = 3.e8;//m/s
+            double c = 3.e1;//cm/ns
             double vt =event.getParticles().get(0).getProperty("vt");
             if (pid == 11) {
                 for(int key : event.getFTOFMap().keySet()) {
@@ -53,7 +53,7 @@ public class FTOFModule extends Module {
                     if (layer == 2) {
                         double vertt = response.getTime() - response.getPath()/c - vt;
                         this.getHistos().getH1F("hsvt").fill(vertt);
-                       // System.out.println(response.getTime());
+
                     }
                 }
                 }
@@ -61,15 +61,6 @@ public class FTOFModule extends Module {
         }
     }
 
-       /* for(int key : event.getFTOFMap().keySet()) {
-            for(DetectorResponse r : event.getFTOFMap().get(key)) {
-                ScintillatorResponse response= (ScintillatorResponse) r;
-                int layer = response.getDescriptor().getLayer();
-                this.getHistos().getH1F("hsc_energy").fill(response.getTime());
-
-            }
-        }
-    }*/
 
     @Override
     public void testHistos() {
@@ -80,7 +71,7 @@ public class FTOFModule extends Module {
         //  assertEquals(npe>0.15,true);
 
     }
-   /* @Override
-    public void analyzeHistos() {this.fitGauss(this.getHistos().getH1F("hcher_nphe"),0,50);}*/
+    @Override
+    public void analyzeHistos() {this.fitGauss(this.getHistos().getH1F("hsvt"),-160,-140);}
 
 }

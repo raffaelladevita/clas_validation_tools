@@ -21,7 +21,7 @@ public class CNDModule extends Module {
         H1F hsc_energy = new H1F("hsc_energy", "hsc_energy", 1000, 0.0, 300.0);
         hsc_energy.setTitleX("Energy");
         hsc_energy.setTitleY("Counts");
-        H1F hsvt = new H1F("hsvt", "hsvt", 1000, 0.0, 300.0);
+        H1F hsvt = new H1F("hsvt", "hsvt", 1000, -10.0, 20.0);
         hsvt.setTitleX("Electron Vertex Time");
         hsvt.setTitleY("Counts");
         DataGroup dscinth = new DataGroup(1, 1);
@@ -32,22 +32,22 @@ public class CNDModule extends Module {
 
     @Override
     public void fillHistos(Event event) {
-        if (event.getParticles().size() > 0 &&event.getFTOFMap().get(0)!=null) {
+        if (event.getParticles().size() > 0 &&event.getCNDMap().get(0)!=null) {
             int pid = event.getParticles().get(0).pid();
             int status = (int) event.getParticles().get(0).getProperty("status");
             int detector = (int) Math.abs(status) / 1000;
-            double c = 3.e8;//m/s
+            double c = 3.e1;//cm/ns
             double vt =event.getParticles().get(0).getProperty("vt");
             if (pid == -211) {
-                for(int key : event.getFTOFMap().keySet()) {
-                    for (DetectorResponse r : event.getFTOFMap().get(key)) {
+                for(int key : event.getCNDMap().keySet()) {
+                    for (DetectorResponse r : event.getCNDMap().get(key)) {
                         ScintillatorResponse response = (ScintillatorResponse) r;
                         int layer = response.getDescriptor().getLayer();
-                        if (layer == 2) {
+                        //if (layer == 1) {
                             double vertt = response.getTime() - response.getPath()/c - vt;
                             this.getHistos().getH1F("hsvt").fill(vertt);
-                            // System.out.println(response.getTime());
-                        }
+
+                       // }
                     }
                 }
             }
