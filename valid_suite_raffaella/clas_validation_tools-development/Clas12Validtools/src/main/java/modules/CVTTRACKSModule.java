@@ -56,9 +56,11 @@ public class CVTTRACKSModule extends Module {
 
     @Override
     public void testHistos() {
-        // double mean = this.getHistos().getH1F("hcal_energy").getMean();
+        double meann = this.getHistos().getH1F("hvzn").getMean();
+        double meanp = this.getHistos().getH1F("hvzp").getMean();
         System.out.println("\n#############################################################");
-        //System.out.println(String.format("mean = %.3f", mean));;
+        System.out.println(String.format("mean negative = %.3f", meann));
+        System.out.println(String.format("mean positive= %.3f", meanp));
         System.out.println("#############################################################");
         //assertEquals(mean>0.2&&mean<0.3,true);
 

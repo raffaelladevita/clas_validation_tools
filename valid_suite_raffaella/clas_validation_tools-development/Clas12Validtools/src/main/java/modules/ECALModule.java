@@ -38,12 +38,11 @@ public class ECALModule extends Module {
     public void fillHistos(Event event) {
         if (event.getParticles().size() > 0) {
             int pid = event.getParticles().get(0).pid();
-            double Ep   =  event.getParticles().get(0).p();
             if(pid==11) {
+                double Ep   =  event.getParticles().get(0).p();
         for (int key : event.getECALMap().keySet()) {
             for (DetectorResponse r : event.getECALMap().get(key)) {
                 CalorimeterResponse response = (CalorimeterResponse) r;
-
                     this.getHistos().getH1F("hcal_energy").fill(response.getEnergy()/Ep);
                 }
             }
@@ -57,7 +56,7 @@ public class ECALModule extends Module {
         System.out.println("\n#############################################################");
         System.out.println(String.format("mean = %.3f", mean));;
         System.out.println("#############################################################");
-        //assertEquals(mean>0.2&&mean<0.3,true);
+        assertEquals(mean>-0.1,true);
 
     }
 

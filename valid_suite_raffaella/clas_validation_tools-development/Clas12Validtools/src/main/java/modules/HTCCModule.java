@@ -72,7 +72,7 @@ public class HTCCModule extends Module {
         System.out.println("\n#############################################################");
         System.out.println(String.format("npe/Events = %.3f", npe));;
         System.out.println("#############################################################");
-       // assertEquals(npe>0.15,true);
+        assertEquals(npe>0.15,true);
   
     }
     

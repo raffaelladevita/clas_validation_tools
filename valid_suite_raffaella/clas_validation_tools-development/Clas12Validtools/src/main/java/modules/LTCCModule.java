@@ -51,11 +51,9 @@ public class LTCCModule extends Module {
     @Override
     public void fillHistos(Event event) {
         if (event.getParticles().size() > 0) {
-
             int pid = event.getParticles().get(0).pid();
             int status = (int) event.getParticles().get(0).getProperty("status");
             int detector = (int) Math.abs(status) / 1000;
-            //System.out.println(detector);
             if (event.getLTCCMap().get(0) != null) {
                 if (pid == 11 && detector == -2) { //detector for LTCC
                     for (DetectorResponse r : event.getLTCCMap().get(0)) {
@@ -75,7 +73,7 @@ public class LTCCModule extends Module {
         System.out.println("\n#############################################################");
         System.out.println(String.format("npe/Events = %.3f", npe));;
         System.out.println("#############################################################");
-      //  assertEquals(npe>0.15,true);
+        //assertEquals(npe>0.15,true);
 
     }
 

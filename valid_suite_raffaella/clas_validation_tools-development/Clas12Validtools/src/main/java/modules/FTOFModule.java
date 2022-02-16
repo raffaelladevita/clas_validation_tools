@@ -64,11 +64,12 @@ public class FTOFModule extends Module {
 
     @Override
     public void testHistos() {
-        //double npe = this.getHistos().getH1F("hcher_nphe").getMean();
+        double mean = this.getHistos().getH1F("hsvt").getMean();
+        //double sigma = this.getHistos().getH1F("hsvt").;
         System.out.println("\n#############################################################");
-        //System.out.println(String.format("npe/Events = %.3f", npe));;
+        System.out.println(String.format("Vt Mean = %.3f", mean));;
         System.out.println("#############################################################");
-        //  assertEquals(npe>0.15,true);
+        //  assertEquals(mean>0.15,true);
 
     }
     @Override
