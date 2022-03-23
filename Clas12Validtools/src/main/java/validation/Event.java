@@ -126,7 +126,7 @@ public class Event {
                 response.setHitIndex(index);
                 response.setPosition(x,y,z);
                 response.setEnergy(energy);
-                response.setEnergy(time);
+                response.setTime(time);
                 response.setMatchPosition(hx, hy, hz);
                 response.setPath(path);
                 response.setAssociation(pindex);
@@ -151,27 +151,33 @@ public class Event {
             ecalMap.clear();
             int rows = recCalBank.rows();
             for (int loop = 0; loop < rows; loop++) {
-                int sector = recCalBank.getByte("sector", loop);
-                int layer = recCalBank.getByte("layer", loop);
-                float x = recCalBank.getFloat("x", loop);
+                int index     = recCalBank.getInt("index", loop);
+                int pindex    = recCalBank.getInt("pindex", loop);
+                int sector    = recCalBank.getByte("sector", loop);
+                int layer     = recCalBank.getByte("layer", loop);
                 int detector  = recCalBank.getByte("detector", loop);
-                float y = recCalBank.getFloat("y", loop);
-                float z = recCalBank.getFloat("z", loop);
-                float hx = recCalBank.getFloat("hx", loop);
-                float hy = recCalBank.getFloat("hy", loop);
-                float hz = recCalBank.getFloat("hz", loop);
-                float path = recCalBank.getFloat("path", loop);
-                float energy = recCalBank.getFloat("energy", loop);
-                CalorimeterResponse response = new CalorimeterResponse();
+                double x      = recCalBank.getFloat("x", loop);
+                double y      = recCalBank.getFloat("y", loop);
+                double z      = recCalBank.getFloat("z", loop);
+                double hx     = recCalBank.getFloat("hx", loop);
+                double hy     = recCalBank.getFloat("hy", loop);
+                double hz     = recCalBank.getFloat("hz", loop);
+                double path   = recCalBank.getFloat("path", loop);
+                double energy = recCalBank.getFloat("energy", loop);
+                double time   = recCalBank.getFloat("time", loop);
+                int status    = recCalBank.getShort("status", loop);
+                CalorimeterResponse response = new CalorimeterResponse(sector, layer, 0);
                 //float u = recCalBank.getFloat("widthu",loop);
                 //float v = recCalBank.getFloat("widthu",loop);
                 //float w = recCalBank.getFloat("widthw",loop);
                 //Response.getDescriptor().setType(type);
-                response.setPosition(x, y, z);
-                response.setHitIndex(loop);
+                response.setHitIndex(index);
+                response.setPosition(x,y,z);
                 response.setEnergy(energy);
-                response.setTime(recCalBank.getFloat("time", loop));
-                response.setStatus(recCalBank.getInt("status", loop));
+                response.setTime(time);
+                response.setMatchPosition(hx, hy, hz);
+                response.setPath(path);
+                response.setAssociation(pindex);
                 if(detector == DetectorType.ECAL.getDetectorId()) {
                     this.loadMap(ecalMap, response);
                 }
@@ -220,16 +226,17 @@ public class Event {
             for (int loop = 0; loop < rows; loop++) {
               //  int id  = recFtBank.getShort("id", loop);
              //   int size = recFtBank.getShort("size", loop);
-                double x = recFtBank.getFloat("x", loop);
-                double y = recFtBank.getFloat("y", loop);
-                double z = recFtBank.getFloat("z", loop);
-                double dx = recFtBank.getFloat("dx", loop);
-                double dy = recFtBank.getFloat("dy", loop);
-                double radius = recFtBank.getFloat("radius", loop);
-                double time = recFtBank.getFloat("time", loop);
-                double energy = recFtBank.getFloat("energy", loop);
+                int index     = recFtBank.getInt("index", loop);
+                int pindex    = recFtBank.getInt("pindex", loop);
                 int detector  = recFtBank.getByte("detector", loop);
-
+                double x      = recFtBank.getFloat("x", loop);
+                double y      = recFtBank.getFloat("y", loop);
+                double z      = recFtBank.getFloat("z", loop);
+                double dx     = recFtBank.getFloat("dx", loop);
+                double dy     = recFtBank.getFloat("dy", loop);
+                double radius = recFtBank.getFloat("radius", loop);
+                double time   = recFtBank.getFloat("time", loop);
+                double energy = recFtBank.getFloat("energy", loop);
                 double z0 = 0; // FIXME vertex
                 double path = Math.sqrt(x * x + y * y + (z - z0) * (z - z0));
                 double cx = x / path;
@@ -237,8 +244,9 @@ public class Event {
                 double cz = (z - z0) / path;
 
                 TaggerResponse response = new TaggerResponse();
+                response.setHitIndex(index);
+                response.setAssociation(pindex);
                 response.setPosition(x, y, z);
-                response.setHitIndex(loop);
                 response.setEnergy(energy);
                 response.setRadius(radius);
                 response.setTime(time);

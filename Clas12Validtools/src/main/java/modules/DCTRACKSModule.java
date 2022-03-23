@@ -25,10 +25,10 @@ public class DCTRACKSModule extends Module {
         H1F hchi2 = new H1F("hchi2", "hchi2", 100, 0, 10.0);
         hchi2.setTitleX("Chi2");
         hchi2.setTitleY("Counts");
-        H1F hvzn = new H1F("hvzn", "hvzn", 100, 0, 10.0);
+        H1F hvzn = new H1F("hvzn", "hvzn", 100, -10.0, 10.0);
         hvzn.setTitleX("Vz");
         hvzn.setTitleY("Counts");
-        H1F hvzp = new H1F("hvzp", "hvzp", 100, 0, 10.0);
+        H1F hvzp = new H1F("hvzp", "hvzp", 100, -10.0, 10.0);
         hvzp.setTitleX("Vz");
         hvzp.setTitleY("Counts");
         DataGroup ddctrk = new DataGroup(2, 1);

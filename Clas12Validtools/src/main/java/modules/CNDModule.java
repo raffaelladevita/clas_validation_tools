@@ -2,6 +2,8 @@ package modules;
 
 import org.jlab.clas.detector.DetectorResponse;
 import org.jlab.clas.detector.ScintillatorResponse;
+import org.jlab.clas.pdg.PhysicsConstants;
+import org.jlab.clas.physics.Particle;
 import validation.Event;
 import validation.Module;
 import org.jlab.groot.data.H1F;
@@ -32,22 +34,23 @@ public class CNDModule extends Module {
 
     @Override
     public void fillHistos(Event event) {
-        if (event.getParticles().size() > 0 &&event.getCNDMap().get(0)!=null) {
-            int pid = event.getParticles().get(0).pid();
-            int status = (int) event.getParticles().get(0).getProperty("status");
-            int detector = (int) Math.abs(status) / 1000;
-            double c = 3.e1;//cm/ns
-            double vt =event.getParticles().get(0).getProperty("vt");
-            if (pid == -211) {
-                for(int key : event.getCNDMap().keySet()) {
-                    for (DetectorResponse r : event.getCNDMap().get(key)) {
-                        ScintillatorResponse response = (ScintillatorResponse) r;
-                        int layer = response.getDescriptor().getLayer();
-                        //if (layer == 1) {
-                            double vertt = response.getTime() - response.getPath()/c - vt;
+        if (event.getParticles().size() > 0 && 
+            event.getParticles().get(0).pid()==11 &&
+            (int) Math.abs(event.getParticles().get(0).getProperty("status"))/1000 == 2 &&
+            !event.getCNDMap().isEmpty()) {
+            for(int i=0; i<event.getParticles().size(); i++) {
+                int pid = event.getParticles().get(i).pid();
+                int status = (int) event.getParticles().get(i).getProperty("status");
+                int detector = (int) Math.abs(status) / 1000;
+                double vt =event.getParticles().get(i).getProperty("vt");
+                if (pid == -211 && detector == 4) {
+                    if(event.getCNDMap().containsKey(i)) {
+                        for (DetectorResponse r : event.getCNDMap().get(i)) {
+                            ScintillatorResponse response = (ScintillatorResponse) r;
+                            int layer = response.getDescriptor().getLayer();
+                            double vertt = response.getTime() - response.getPath()/PhysicsConstants.speedOfLight() - vt;
                             this.getHistos().getH1F("hsvt").fill(vertt);
-
-                       // }
+                        }
                     }
                 }
             }

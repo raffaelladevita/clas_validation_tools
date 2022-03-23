@@ -121,8 +121,8 @@ public class Module {
         f1.setParameter(0, tmp_Amp);
         f1.setParameter(1, tmp_Mean);
         f1.setParameter(2, tmp_sigma / 2);
-        f1.setLineColor(5);
-        f1.setLineWidth(7);
+        f1.setLineColor(2);
+        f1.setLineWidth(2);
         f1.setOptStat(111110);
         DataFitter.fit(f1, histo, "Q");
         return f1;
